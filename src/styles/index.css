@@ -1,6 +1,18 @@
+/* 字体自托管：Inter/Manrope（英文）+ Noto Sans SC（中文），运行时零外部请求 */
+@import '@fontsource-variable/inter/opsz.css';
+@import '@fontsource-variable/manrope/index.css';
+@import '@fontsource-variable/noto-sans-sc/index.css';
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import './theme.css';
+
+/*
+ * 字体切换类是运行时拼接的（font-${name}），Tailwind 静态扫描不到。
+ * 原先 font-inter/font-manrope 靠 fonts.ts 注释里的字面量碰巧生成，
+ * 在此显式声明四个类名，保证设置页的字体选项全部真正生效。
+ */
+@source inline('font-inter font-manrope font-noto font-system');
 
 @custom-variant dark (&:is(.dark *));
 
