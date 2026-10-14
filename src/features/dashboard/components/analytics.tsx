@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   Card,
   CardContent,
@@ -8,12 +9,14 @@ import {
 import { AnalyticsChart } from './analytics-chart'
 
 export function Analytics() {
+  const { t } = useTranslation()
+
   return (
     <div className='space-y-4'>
       <Card>
         <CardHeader>
-          <CardTitle>流量总览</CardTitle>
-          <CardDescription>每周点击量与独立访客</CardDescription>
+          <CardTitle>{t('analytics.trafficOverview')}</CardTitle>
+          <CardDescription>{t('analytics.trafficOverviewDesc')}</CardDescription>
         </CardHeader>
         <CardContent className='px-6'>
           <AnalyticsChart />
@@ -22,7 +25,9 @@ export function Analytics() {
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>总点击量</CardTitle>
+            <CardTitle className='text-sm font-medium'>
+              {t('analytics.totalClicks')}
+            </CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
@@ -39,13 +44,15 @@ export function Analytics() {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>1,248</div>
-            <p className='text-xs text-muted-foreground'>较上周 +12.4%</p>
+            <p className='text-xs text-muted-foreground'>
+              {t('analytics.upFromLastWeek', { value: '+12.4%' })}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <CardTitle className='text-sm font-medium'>
-              独立访客
+              {t('analytics.uniqueVisitors')}
             </CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -63,12 +70,16 @@ export function Analytics() {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>832</div>
-            <p className='text-xs text-muted-foreground'>较上周 +5.8%</p>
+            <p className='text-xs text-muted-foreground'>
+              {t('analytics.upFromLastWeek', { value: '+5.8%' })}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>跳出率</CardTitle>
+            <CardTitle className='text-sm font-medium'>
+              {t('analytics.bounceRate')}
+            </CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
@@ -84,12 +95,16 @@ export function Analytics() {
           </CardHeader>
           <CardContent>
             <div className='text-2xl font-bold'>42%</div>
-            <p className='text-xs text-muted-foreground'>较上周 -3.2%</p>
+            <p className='text-xs text-muted-foreground'>
+              {t('analytics.upFromLastWeek', { value: '-3.2%' })}
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium'>平均停留时长</CardTitle>
+            <CardTitle className='text-sm font-medium'>
+              {t('analytics.avgSession')}
+            </CardTitle>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
@@ -105,24 +120,26 @@ export function Analytics() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>3 分 24 秒</div>
-            <p className='text-xs text-muted-foreground'>较上周 +18 秒</p>
+            <div className='text-2xl font-bold'>{t('analytics.avgSessionValue')}</div>
+            <p className='text-xs text-muted-foreground'>
+              {t('analytics.upSecondsLastWeek', { value: '18' })}
+            </p>
           </CardContent>
         </Card>
       </div>
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
         <Card className='col-span-1 lg:col-span-4'>
           <CardHeader>
-            <CardTitle>流量来源</CardTitle>
-            <CardDescription>主要流量来源渠道</CardDescription>
+            <CardTitle>{t('analytics.referrers')}</CardTitle>
+            <CardDescription>{t('analytics.referrersDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <SimpleBarList
               items={[
-                { name: '直接访问', value: 512 },
-                { name: 'Product Hunt', value: 238 },
-                { name: 'Twitter', value: 174 },
-                { name: '博客', value: 104 },
+                { name: t('analytics.direct'), value: 512 },
+                { name: t('analytics.productHunt'), value: 238 },
+                { name: t('analytics.twitter'), value: 174 },
+                { name: t('analytics.blog'), value: 104 },
               ]}
               barClass='bg-primary'
               valueFormatter={(n) => `${n}`}
@@ -131,15 +148,15 @@ export function Analytics() {
         </Card>
         <Card className='col-span-1 lg:col-span-3'>
           <CardHeader>
-            <CardTitle>设备分布</CardTitle>
-            <CardDescription>用户的设备访问方式</CardDescription>
+            <CardTitle>{t('analytics.devices')}</CardTitle>
+            <CardDescription>{t('analytics.devicesDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <SimpleBarList
               items={[
-                { name: '桌面端', value: 74 },
-                { name: '移动端', value: 22 },
-                { name: '平板', value: 4 },
+                { name: t('analytics.desktop'), value: 74 },
+                { name: t('analytics.mobile'), value: 22 },
+                { name: t('analytics.tablet'), value: 4 },
               ]}
               barClass='bg-muted-foreground'
               valueFormatter={(n) => `${n}%`}

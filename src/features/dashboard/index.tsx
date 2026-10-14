@@ -71,7 +71,7 @@ export function Dashboard() {
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    总营收
+                    {t('dashboard.totalRevenue')}
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -89,14 +89,14 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>$45,231.89</div>
                   <p className='text-xs text-muted-foreground'>
-                      +20.1% 较上月
+                      {t('dashboard.upFromLastMonth', { value: '+20.1%' })}
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    新增订阅
+                    {t('dashboard.subscriptions')}
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -116,13 +116,15 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>+2350</div>
                   <p className='text-xs text-muted-foreground'>
-                      +180.1% 较上月
+                      {t('dashboard.upFromLastMonth', { value: '+180.1%' })}
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'>销量</CardTitle>
+                  <CardTitle className='text-sm font-medium'>
+                    {t('dashboard.sales')}
+                  </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 24 24'
@@ -140,14 +142,14 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>+12,234</div>
                   <p className='text-xs text-muted-foreground'>
-                      +19% 较上月
+                      {t('dashboard.upFromLastMonth', { value: '+19%' })}
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    当前在线
+                    {t('dashboard.activeNow')}
                   </CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -165,7 +167,7 @@ export function Dashboard() {
                 <CardContent>
                   <div className='text-2xl font-bold'>+573</div>
                   <p className='text-xs text-muted-foreground'>
-                      +201 较上小时
+                      {t('dashboard.upSinceLastHour', { value: '+201' })}
                   </p>
                 </CardContent>
               </Card>
@@ -173,7 +175,7 @@ export function Dashboard() {
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
               <Card className='col-span-1 lg:col-span-4'>
                 <CardHeader>
-                  <CardTitle>营收概览</CardTitle>
+                  <CardTitle>{t('dashboard.revenueOverview')}</CardTitle>
                 </CardHeader>
                 <CardContent className='ps-2'>
                   <Overview />
@@ -181,8 +183,10 @@ export function Dashboard() {
               </Card>
               <Card className='col-span-1 lg:col-span-3'>
                 <CardHeader>
-                  <CardTitle>最近销售</CardTitle>
-                  <CardDescription>本月已完成 265 笔销售。</CardDescription>
+                  <CardTitle>{t('dashboard.recentSales')}</CardTitle>
+                  <CardDescription>
+                    {t('dashboard.recentSalesDesc')}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <RecentSales />
@@ -201,25 +205,25 @@ export function Dashboard() {
 
 const topNav = [
   {
-    title: '概览',
+    title: 'dashboard.overview',
     href: 'dashboard/overview',
     isActive: true,
     disabled: false,
   },
   {
-    title: '客户',
+    title: 'dashboard.customers',
     href: 'dashboard/customers',
     isActive: false,
     disabled: true,
   },
   {
-    title: '商品',
+    title: 'dashboard.products',
     href: 'dashboard/products',
     isActive: false,
     disabled: true,
   },
   {
-    title: '设置',
+    title: 'common.settings',
     href: 'dashboard/settings',
     isActive: false,
     disabled: true,

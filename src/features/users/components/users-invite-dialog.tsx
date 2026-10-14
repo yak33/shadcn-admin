@@ -1,4 +1,6 @@
+import { useMemo } from 'react'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MailPlus, Send } from 'lucide-react'
@@ -26,16 +28,18 @@ import { Textarea } from '@/components/ui/textarea'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { roles } from '../data/data'
 
-const formSchema = z.object({
-  email: z.email({
-    error: (iss) =>
-      iss.input === '' ? 'Please enter an email to invite.' : undefined,
-  }),
-  role: z.string().min(1, 'Role is required.'),
-  desc: z.string().optional(),
-})
+// 校验消息需要翻译，schema 通过工厂函数在组件内用当前语言的 t 构建
+const getUserInviteFormSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z.email({
+      error: (iss) =>
+        iss.input === '' ? t('users.inviteEmailRequired') : undefined,
+    }),
+    role: z.string().min(1, t('users.roleRequired')),
+    desc: z.string().optional(),
+  })
 
-type UserInviteForm = z.infer<typeof formSchema>
+type UserInviteForm = z.infer<ReturnType<typeof getUserInviteFormSchema>>
 
 type UserInviteDialogProps = {
   open: boolean
@@ -46,6 +50,8 @@ export function UsersInviteDialog({
   open,
   onOpenChange,
 }: UserInviteDialogProps) {
+  const { t } = useTranslation()
+  const formSchema = useMemo(() => getUserInviteFormSchema(t), [t])
   const form = useForm<UserInviteForm>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: '', role: '', desc: '' },
@@ -68,12 +74,9 @@ export function UsersInviteDialog({
       <DialogContent className='sm:max-w-md'>
         <DialogHeader className='text-start'>
           <DialogTitle className='flex items-center gap-2'>
-            <MailPlus /> Invite User
+            <MailPlus /> {t('users.inviteUser')}
           </DialogTitle>
-          <DialogDescription>
-            Invite new user to join your team by sending them an email
-            invitation. Assign a role to define their access level.
-          </DialogDescription>
+          <DialogDescription>{t('users.inviteUserDesc')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -86,7 +89,7 @@ export function UsersInviteDialog({
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('users.email')}</FormLabel>
                   <FormControl>
                     <Input
                       type='email'
@@ -103,13 +106,13 @@ export function UsersInviteDialog({
               name='role'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>{t('users.role')}</FormLabel>
                   <SelectDropdown
                     defaultValue={field.value}
                     onValueChange={field.onChange}
-                    placeholder='Select a role'
+                    placeholder={t('users.selectRole')}
                     items={roles.map(({ label, value }) => ({
-                      label,
+                      label: t(label),
                       value,
                     }))}
                   />
@@ -122,11 +125,11 @@ export function UsersInviteDialog({
               name='desc'
               render={({ field }) => (
                 <FormItem className=''>
-                  <FormLabel>Description (optional)</FormLabel>
+                  <FormLabel>{t('users.descriptionOptional')}</FormLabel>
                   <FormControl>
                     <Textarea
                       className='resize-none'
-                      placeholder='Add a personal note to your invitation (optional)'
+                      placeholder={t('users.inviteNotePlaceholder')}
                       {...field}
                     />
                   </FormControl>
@@ -138,10 +141,10 @@ export function UsersInviteDialog({
         </Form>
         <DialogFooter className='gap-y-2'>
           <DialogClose asChild>
-            <Button variant='outline'>Cancel</Button>
+            <Button variant='outline'>{t('common.cancel')}</Button>
           </DialogClose>
           <Button type='submit' form='user-invite-form'>
-            Invite <Send />
+            {t('users.invite')} <Send />
           </Button>
         </DialogFooter>
       </DialogContent>

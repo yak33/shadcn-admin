@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AlertTriangle } from 'lucide-react'
 import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -20,13 +21,14 @@ export function UsersDeleteDialog({
   onOpenChange,
   currentRow,
 }: UserDeleteDialogProps) {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
 
   const handleDelete = () => {
     if (value.trim() !== currentRow.username) return
 
     onOpenChange(false)
-    showSubmittedData(currentRow, 'The following user has been deleted:')
+    showSubmittedData(currentRow, t('users.userDeletedToast'))
   }
 
   return (
@@ -41,7 +43,7 @@ export function UsersDeleteDialog({
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
-          Delete User
+          {t('users.deleteUser')}
         </span>
       }
       desc={
@@ -54,35 +56,34 @@ export function UsersDeleteDialog({
           className='space-y-4'
         >
           <p className='mb-2'>
-            Are you sure you want to delete{' '}
-            <span className='font-bold'>{currentRow.username}</span>?
+            {t('users.deleteConfirmPrefix')}{' '}
+            <span className='font-bold'>{currentRow.username}</span>
+            {t('users.deleteConfirmSuffix')}
             <br />
-            This action will permanently remove the user with the role of{' '}
+            {t('users.deletePermPrefix')}{' '}
             <span className='font-bold'>
               {currentRow.role.toUpperCase()}
             </span>{' '}
-            from the system. This cannot be undone.
+            {t('users.deletePermSuffix')}
           </p>
 
           <Label className='my-2'>
-            Username:
+            {t('users.usernameLabel')}
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter username to confirm deletion.'
+              placeholder={t('users.enterUsernameToConfirm')}
               autoFocus
             />
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
-            <AlertDescription>
-              Please be careful, this operation can not be rolled back.
-            </AlertDescription>
+            <AlertTitle>{t('users.warning')}</AlertTitle>
+            <AlertDescription>{t('users.rollbackWarning')}</AlertDescription>
           </Alert>
         </form>
       }
-      confirmText='Delete'
+      confirmText={t('common.delete')}
       destructive
     />
   )

@@ -11,24 +11,44 @@ export const callTypes = new Map<UserStatus, string>([
   ],
 ])
 
+// label 为 i18n key，渲染处通过 t(label) 显示翻译文案
+export const statuses = [
+  {
+    label: 'users.statusActive',
+    value: 'active',
+  },
+  {
+    label: 'users.statusInactive',
+    value: 'inactive',
+  },
+  {
+    label: 'users.statusInvited',
+    value: 'invited',
+  },
+  {
+    label: 'users.statusSuspended',
+    value: 'suspended',
+  },
+] as const
+
 export const roles = [
   {
-    label: 'Superadmin',
+    label: 'users.roleSuperadmin',
     value: 'superadmin',
     icon: Shield,
   },
   {
-    label: 'Admin',
+    label: 'users.roleAdmin',
     value: 'admin',
     icon: UserCheck,
   },
   {
-    label: 'Manager',
+    label: 'users.roleManager',
     value: 'manager',
     icon: Users,
   },
   {
-    label: 'Cashier',
+    label: 'users.roleCashier',
     value: 'cashier',
     icon: CreditCard,
   },

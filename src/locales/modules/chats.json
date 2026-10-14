@@ -1,0 +1,36 @@
+{
+  "zh-CN": {
+    "title": "消息",
+    "searchLabel": "搜索",
+    "searchPlaceholder": "搜索聊天...",
+    "youMessage": "你：{{message}}",
+    "textBoxLabel": "聊天输入框",
+    "messagePlaceholder": "输入消息...",
+    "send": "发送",
+    "yourMessages": "你的消息",
+    "emptyHint": "发送一条消息即可开始聊天。",
+    "sendMessage": "发送消息",
+    "newMessage": "新消息",
+    "to": "发送给：",
+    "searchPeople": "搜索联系人...",
+    "noPeopleFound": "未找到联系人。",
+    "chatButton": "聊天"
+  },
+  "en-US": {
+    "title": "Inbox",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Search chat...",
+    "youMessage": "You: {{message}}",
+    "textBoxLabel": "Chat Text Box",
+    "messagePlaceholder": "Type your messages...",
+    "send": "Send",
+    "yourMessages": "Your messages",
+    "emptyHint": "Send a message to start a chat.",
+    "sendMessage": "Send message",
+    "newMessage": "New message",
+    "to": "To:",
+    "searchPeople": "Search people...",
+    "noPeopleFound": "No people found.",
+    "chatButton": "Chat"
+  }
+}

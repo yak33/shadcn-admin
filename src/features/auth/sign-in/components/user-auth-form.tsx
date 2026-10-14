@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Loader2, LogIn } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { IconFacebook, IconGithub } from '@/assets/brand-icons'
 import { useAuthStore } from '@/stores/auth-store'
@@ -20,16 +21,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 
-const formSchema = z.object({
-  email: z.email({
-    error: (iss) => (iss.input === '' ? 'Please enter your email.' : undefined),
-  }),
-  password: z
-    .string()
-    .min(1, 'Please enter your password.')
-    .min(7, 'Password must be at least 7 characters long.'),
-})
-
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLFormElement> {
   redirectTo?: string
 }
@@ -42,6 +33,33 @@ export function UserAuthForm({
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { auth } = useAuthStore()
+  const { t } = useTranslation()
+
+  // 校验文案依赖 t()，schema 只能在组件内构建
+  const formSchema = z.object({
+    email: z.email({
+      error: (iss) =>
+        iss.input === ''
+          ? t('auth.emailRequired', {
+              defaultValue: 'Please enter your email.',
+            })
+          : undefined,
+    }),
+    password: z
+      .string()
+      .min(
+        1,
+        t('auth.passwordRequired', {
+          defaultValue: 'Please enter your password.',
+        })
+      )
+      .min(
+        7,
+        t('auth.passwordMinLength', {
+          defaultValue: 'Password must be at least 7 characters long.',
+        })
+      ),
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +73,7 @@ export function UserAuthForm({
     setIsLoading(true)
 
     toast.promise(sleep(2000), {
-      loading: 'Signing in...',
+      loading: t('auth.signingIn', { defaultValue: 'Signing in...' }),
       success: () => {
         setIsLoading(false)
 
@@ -75,9 +93,12 @@ export function UserAuthForm({
         const targetPath = redirectTo || '/'
         navigate({ to: targetPath, replace: true })
 
-        return `Welcome back, ${data.email}!`
+        return t('auth.welcomeBack', {
+          defaultValue: 'Welcome back, {{email}}!',
+          email: data.email,
+        })
       },
-      error: 'Error',
+      error: t('auth.toastError', { defaultValue: 'Error' }),
     })
   }
 
@@ -93,7 +114,9 @@ export function UserAuthForm({
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>
+                {t('auth.email', { defaultValue: 'Email' })}
+              </FormLabel>
               <FormControl>
                 <Input placeholder='name@example.com' {...field} />
               </FormControl>
@@ -106,7 +129,9 @@ export function UserAuthForm({
           name='password'
           render={({ field }) => (
             <FormItem className='relative'>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>
+                {t('auth.password', { defaultValue: 'Password' })}
+              </FormLabel>
               <FormControl>
                 <PasswordInput placeholder='********' {...field} />
               </FormControl>
@@ -115,14 +140,16 @@ export function UserAuthForm({
                 to='/forgot-password'
                 className='absolute inset-e-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75'
               >
-                Forgot password?
+                {t('auth.forgotPassword', {
+                  defaultValue: 'Forgot password?',
+                })}
               </Link>
             </FormItem>
           )}
         />
         <Button className='mt-2' disabled={isLoading}>
           {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
-          Sign in
+          {t('auth.signInButton', { defaultValue: 'Sign in' })}
         </Button>
 
         <div className='relative my-2'>
@@ -131,7 +158,9 @@ export function UserAuthForm({
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
             <span className='bg-background px-2 text-muted-foreground'>
-              Or continue with
+              {t('auth.orContinueWith', {
+                defaultValue: 'Or continue with',
+              })}
             </span>
           </div>
         </div>

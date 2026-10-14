@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { showSubmittedData } from '@/lib/show-submitted-data'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -21,18 +22,20 @@ import {
   InputOTPSeparator,
 } from '@/components/ui/input-otp'
 
-const formSchema = z.object({
-  otp: z
-    .string()
-    .min(6, 'Please enter the 6-digit code.')
-    .max(6, 'Please enter the 6-digit code.'),
-})
-
 type OtpFormProps = React.HTMLAttributes<HTMLFormElement>
 
 export function OtpForm({ className, ...props }: OtpFormProps) {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const { t } = useTranslation()
+
+  // 校验文案依赖 t()，schema 只能在组件内构建
+  const otpRequiredMessage = t('auth.otpRequired', {
+    defaultValue: 'Please enter the 6-digit code.',
+  })
+  const formSchema = z.object({
+    otp: z.string().min(6, otpRequiredMessage).max(6, otpRequiredMessage),
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,7 +67,11 @@ export function OtpForm({ className, ...props }: OtpFormProps) {
           name='otp'
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='sr-only'>One-Time Password</FormLabel>
+              <FormLabel className='sr-only'>
+                {t('auth.oneTimePassword', {
+                  defaultValue: 'One-Time Password',
+                })}
+              </FormLabel>
               <FormControl>
                 <InputOTP
                   maxLength={6}
@@ -92,7 +99,7 @@ export function OtpForm({ className, ...props }: OtpFormProps) {
           )}
         />
         <Button className='mt-2' disabled={otp.length < 6 || isLoading}>
-          Verify
+          {t('auth.verifyButton', { defaultValue: 'Verify' })}
         </Button>
       </form>
     </Form>

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslation } from 'react-i18next'
 import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -14,40 +15,45 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
+// label 存 i18n key，渲染处统一 t() 翻译
 const items = [
   {
     id: 'recents',
-    label: 'Recents',
+    label: 'settings.displayRecents',
   },
   {
     id: 'home',
-    label: 'Home',
+    label: 'settings.displayHome',
   },
   {
     id: 'applications',
-    label: 'Applications',
+    label: 'settings.displayApplications',
   },
   {
     id: 'desktop',
-    label: 'Desktop',
+    label: 'settings.displayDesktop',
   },
   {
     id: 'downloads',
-    label: 'Downloads',
+    label: 'settings.displayDownloads',
   },
   {
     id: 'documents',
-    label: 'Documents',
+    label: 'settings.displayDocuments',
   },
 ] as const
 
-const displayFormSchema = z.object({
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'You have to select at least one item.',
-  }),
-})
+type Translate = ReturnType<typeof useTranslation>['t']
 
-type DisplayFormValues = z.infer<typeof displayFormSchema>
+// 校验文案需要按当前语言翻译，故 schema 以 t 为参数在组件内构建
+const buildDisplayFormSchema = (t: Translate) =>
+  z.object({
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+      message: t('settings.itemsRequired'),
+    }),
+  })
+
+type DisplayFormValues = z.infer<ReturnType<typeof buildDisplayFormSchema>>
 
 // This can come from your database or API.
 const defaultValues: Partial<DisplayFormValues> = {
@@ -55,8 +61,10 @@ const defaultValues: Partial<DisplayFormValues> = {
 }
 
 export function DisplayForm() {
+  const { t } = useTranslation()
+
   const form = useForm<DisplayFormValues>({
-    resolver: zodResolver(displayFormSchema),
+    resolver: zodResolver(buildDisplayFormSchema(t)),
     defaultValues,
   })
 
@@ -72,9 +80,11 @@ export function DisplayForm() {
           render={() => (
             <FormItem>
               <div className='mb-4'>
-                <FormLabel className='text-base'>Sidebar</FormLabel>
+                <FormLabel className='text-base'>
+                  {t('settings.sidebar')}
+                </FormLabel>
                 <FormDescription>
-                  Select the items you want to display in the sidebar.
+                  {t('settings.sidebarDesc')}
                 </FormDescription>
               </div>
               {items.map((item) => (
@@ -103,7 +113,7 @@ export function DisplayForm() {
                           />
                         </FormControl>
                         <FormLabel className='font-normal'>
-                          {item.label}
+                          {t(item.label)}
                         </FormLabel>
                       </FormItem>
                     )
@@ -114,7 +124,7 @@ export function DisplayForm() {
             </FormItem>
           )}
         />
-        <Button type='submit'>Update display</Button>
+        <Button type='submit'>{t('settings.updateDisplay')}</Button>
       </form>
     </Form>
   )

@@ -1,6 +1,7 @@
 import { type ChangeEvent, useState } from 'react'
 import { getRouteApi } from '@tanstack/react-router'
 import { SlidersHorizontal, ArrowUpAZ, ArrowDownAZ } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -23,10 +24,11 @@ const route = getRouteApi('/_authenticated/apps/')
 
 type AppType = 'all' | 'connected' | 'notConnected'
 
+// 值为 i18n 完整 key，渲染处通过 t() 取文案
 const appText = new Map<AppType, string>([
-  ['all', 'All Apps'],
-  ['connected', 'Connected'],
-  ['notConnected', 'Not Connected'],
+  ['all', 'apps.allApps'],
+  ['connected', 'apps.connected'],
+  ['notConnected', 'apps.notConnected'],
 ])
 
 export function Apps() {
@@ -36,6 +38,7 @@ export function Apps() {
     sort: initSort = 'asc',
   } = route.useSearch()
   const navigate = route.useNavigate()
+  const { t } = useTranslation()
 
   const [sort, setSort] = useState(initSort)
   const [appType, setAppType] = useState(type)
@@ -95,28 +98,30 @@ export function Apps() {
       <Main fixed>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>
-            App Integrations
+            {t('apps.title')}
           </h1>
-          <p className='text-muted-foreground'>
-            Here&apos;s a list of your apps for the integration!
-          </p>
+          <p className='text-muted-foreground'>{t('apps.titleDesc')}</p>
         </div>
         <div className='my-4 flex items-end justify-between sm:my-0 sm:items-center'>
           <div className='flex flex-col gap-4 sm:my-4 sm:flex-row'>
             <Input
-              placeholder='Filter apps...'
+              placeholder={t('apps.filterPlaceholder')}
               className='h-9 w-40 lg:w-62.5'
               value={searchTerm}
               onChange={handleSearch}
             />
             <Select value={appType} onValueChange={handleTypeChange}>
               <SelectTrigger className='w-36'>
-                <SelectValue>{appText.get(appType)}</SelectValue>
+                <SelectValue>
+                  {t(appText.get(appType) ?? 'apps.allApps')}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='all'>All Apps</SelectItem>
-                <SelectItem value='connected'>Connected</SelectItem>
-                <SelectItem value='notConnected'>Not Connected</SelectItem>
+                <SelectItem value='all'>{t('apps.allApps')}</SelectItem>
+                <SelectItem value='connected'>{t('apps.connected')}</SelectItem>
+                <SelectItem value='notConnected'>
+                  {t('apps.notConnected')}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -131,13 +136,13 @@ export function Apps() {
               <SelectItem value='asc'>
                 <div className='flex items-center gap-4'>
                   <ArrowUpAZ size={16} />
-                  <span>Ascending</span>
+                  <span>{t('apps.ascending')}</span>
                 </div>
               </SelectItem>
               <SelectItem value='desc'>
                 <div className='flex items-center gap-4'>
                   <ArrowDownAZ size={16} />
-                  <span>Descending</span>
+                  <span>{t('apps.descending')}</span>
                 </div>
               </SelectItem>
             </SelectContent>
@@ -161,12 +166,12 @@ export function Apps() {
                   size='sm'
                   className={`${app.connected ? 'border border-blue-300 bg-blue-50 hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-950 dark:hover:bg-blue-900' : ''}`}
                 >
-                  {app.connected ? 'Connected' : 'Connect'}
+                  {app.connected ? t('apps.connected') : t('apps.connect')}
                 </Button>
               </div>
               <div>
                 <h2 className='mb-1 font-semibold'>{app.name}</h2>
-                <p className='line-clamp-2 text-gray-500'>{app.desc}</p>
+                <p className='line-clamp-2 text-gray-500'>{t(app.desc)}</p>
               </div>
             </li>
           ))}

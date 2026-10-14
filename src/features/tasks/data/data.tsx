@@ -10,44 +10,45 @@ import {
   CircleOff,
 } from 'lucide-react'
 
+// 模块级常量无法使用 hook，label 存放完整 i18n key，由渲染组件通过 t(label) 显示
 export const labels = [
   {
     value: 'bug',
-    label: 'Bug',
+    label: 'tasks.labelBug',
   },
   {
     value: 'feature',
-    label: 'Feature',
+    label: 'tasks.labelFeature',
   },
   {
     value: 'documentation',
-    label: 'Documentation',
+    label: 'tasks.labelDocumentation',
   },
 ]
 
 export const statuses = [
   {
-    label: 'Backlog',
+    label: 'tasks.statusBacklog',
     value: 'backlog' as const,
     icon: HelpCircle,
   },
   {
-    label: 'Todo',
+    label: 'tasks.statusTodo',
     value: 'todo' as const,
     icon: Circle,
   },
   {
-    label: 'In Progress',
+    label: 'tasks.statusInProgress',
     value: 'in progress' as const,
     icon: Timer,
   },
   {
-    label: 'Done',
+    label: 'tasks.statusDone',
     value: 'done' as const,
     icon: CheckCircle,
   },
   {
-    label: 'Canceled',
+    label: 'tasks.statusCanceled',
     value: 'canceled' as const,
     icon: CircleOff,
   },
@@ -55,22 +56,22 @@ export const statuses = [
 
 export const priorities = [
   {
-    label: 'Low',
+    label: 'tasks.priorityLow',
     value: 'low' as const,
     icon: ArrowDown,
   },
   {
-    label: 'Medium',
+    label: 'tasks.priorityMedium',
     value: 'medium' as const,
     icon: ArrowRight,
   },
   {
-    label: 'High',
+    label: 'tasks.priorityHigh',
     value: 'high' as const,
     icon: ArrowUp,
   },
   {
-    label: 'Critical',
+    label: 'tasks.priorityCritical',
     value: 'critical' as const,
     icon: AlertCircle,
   },

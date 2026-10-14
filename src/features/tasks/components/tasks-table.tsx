@@ -12,6 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { useTableUrlState } from '@/hooks/use-table-url-state'
 import {
@@ -26,7 +27,7 @@ import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
 import { priorities, statuses } from '../data/data'
 import { type Task } from '../data/schema'
 import { DataTableBulkActions } from './data-table-bulk-actions'
-import { tasksColumns as columns } from './tasks-columns'
+import { useTasksColumns } from './tasks-columns'
 
 const route = getRouteApi('/_authenticated/tasks/')
 
@@ -35,6 +36,9 @@ type DataTableProps = {
 }
 
 export function TasksTable({ data }: DataTableProps) {
+  const { t } = useTranslation()
+  const columns = useTasksColumns()
+
   // Local UI-only states
   const [rowSelection, setRowSelection] = useState({})
   const [sorting, setSorting] = useState<SortingState>([])
@@ -113,17 +117,25 @@ export function TasksTable({ data }: DataTableProps) {
     >
       <DataTableToolbar
         table={table}
-        searchPlaceholder='Filter by title or ID...'
+        searchPlaceholder={t('tasks.searchPlaceholder', {
+          defaultValue: 'Filter by title or ID...',
+        })}
         filters={[
           {
             columnId: 'status',
-            title: 'Status',
-            options: statuses,
+            title: t('tasks.colStatus', { defaultValue: 'Status' }),
+            options: statuses.map((status) => ({
+              ...status,
+              label: t(status.label),
+            })),
           },
           {
             columnId: 'priority',
-            title: 'Priority',
-            options: priorities,
+            title: t('tasks.colPriority', { defaultValue: 'Priority' }),
+            options: priorities.map((priority) => ({
+              ...priority,
+              label: t(priority.label),
+            })),
           },
         ]}
       />
@@ -183,7 +195,7 @@ export function TasksTable({ data }: DataTableProps) {
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  No results.
+                  {t('tasks.noResults', { defaultValue: 'No results.' })}
                 </TableCell>
               </TableRow>
             )}

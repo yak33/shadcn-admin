@@ -17,9 +17,9 @@ describe('UsersInviteDialog', () => {
 
     const title = getByRole('heading', {
       level: 2,
-      name: /Invite User/i,
+      name: 'users.inviteUser',
     })
-    const desc = getByText(/Invite new user to join your team/i)
+    const desc = getByText('users.inviteUserDesc')
 
     await expect.element(title).toBeInTheDocument()
     await expect.element(desc).toBeInTheDocument()
@@ -44,7 +44,7 @@ describe('UsersInviteDialog', () => {
       <UsersInviteDialog open onOpenChange={onOpenChange} />
     )
 
-    const cancelButton = getByRole('button', { name: /Cancel/i })
+    const cancelButton = getByRole('button', { name: 'common.cancel' })
     await userEvent.click(cancelButton)
 
     expect(onOpenChange).toHaveBeenCalledOnce()
@@ -57,21 +57,21 @@ describe('UsersInviteDialog', () => {
       <UsersInviteDialog open onOpenChange={onOpenChange} />
     )
 
-    const emailErrorMessage = getByText(/Please enter an email to invite./i)
-    const roleErrorMessage = getByText(/Role is required./i)
+    const emailErrorMessage = getByText('users.inviteEmailRequired')
+    const roleErrorMessage = getByText('users.roleRequired')
 
-    const submitButton = getByRole('button', { name: /Invite/i })
+    const submitButton = getByRole('button', { name: 'users.invite' })
     await userEvent.click(submitButton)
 
     await expect.element(emailErrorMessage).toBeInTheDocument()
     await expect.element(roleErrorMessage).toBeInTheDocument()
 
-    const emailInput = getByRole('textbox', { name: /Email/i })
+    const emailInput = getByRole('textbox', { name: 'users.email' })
     await userEvent.fill(emailInput, 'test@example.com')
 
-    const roleSelect = getByRole('combobox', { name: /Role/i })
+    const roleSelect = getByRole('combobox', { name: 'users.role' })
     await userEvent.click(roleSelect)
-    await userEvent.click(getByRole('option', { name: /Superadmin/i }))
+    await userEvent.click(getByRole('option', { name: 'users.roleSuperadmin' }))
 
     await expect.element(emailErrorMessage).not.toBeInTheDocument()
     await expect.element(roleErrorMessage).not.toBeInTheDocument()
@@ -93,31 +93,31 @@ describe('UsersInviteDialog', () => {
     const { getByRole } = await render(<Harness />)
 
     const EMAIL_VALUE = 'test@example.com'
-    const ROLE_VALUE = 'Superadmin'
+    const ROLE_VALUE = 'users.roleSuperadmin'
     const DESC_VALUE = 'This is a test description'
 
-    const emailInput = getByRole('textbox', { name: /Email/i })
+    const emailInput = getByRole('textbox', { name: 'users.email' })
     await userEvent.fill(emailInput, EMAIL_VALUE)
 
-    const roleSelect = getByRole('combobox', { name: /Role/i })
+    const roleSelect = getByRole('combobox', { name: 'users.role' })
     await userEvent.click(roleSelect)
     await userEvent.click(getByRole('option', { name: ROLE_VALUE }))
 
-    const descInput = getByRole('textbox', { name: /Description/i })
+    const descInput = getByRole('textbox', { name: 'users.descriptionOptional' })
     await userEvent.fill(descInput, DESC_VALUE)
 
     await expect.element(emailInput).toHaveValue(EMAIL_VALUE)
     await expect.element(roleSelect).toHaveTextContent(ROLE_VALUE)
     await expect.element(descInput).toHaveValue(DESC_VALUE)
 
-    const cancelButton = getByRole('button', { name: /Cancel/i })
+    const cancelButton = getByRole('button', { name: 'common.cancel' })
     await userEvent.click(cancelButton)
 
     const reopenButton = getByRole('button', { name: /Reopen/i })
     await userEvent.click(reopenButton)
 
     await expect.element(emailInput).toHaveValue('')
-    await expect.element(roleSelect).toHaveTextContent('Select a role')
+    await expect.element(roleSelect).toHaveTextContent('users.selectRole')
     await expect.element(descInput).toHaveValue('')
   })
 
@@ -131,17 +131,19 @@ describe('UsersInviteDialog', () => {
     const ROLE_VALUE = 'superadmin'
     const DESC_VALUE = 'Welcome aboard!'
 
-    const emailInput = getByRole('textbox', { name: /Email/i })
+    const emailInput = getByRole('textbox', { name: 'users.email' })
     await userEvent.fill(emailInput, EMAIL_VALUE)
 
-    const roleSelect = getByRole('combobox', { name: /Role/i })
+    const roleSelect = getByRole('combobox', { name: 'users.role' })
     await userEvent.click(roleSelect)
-    await userEvent.click(getByRole('option', { name: ROLE_VALUE }))
+    await userEvent.click(
+      getByRole('option', { name: 'users.roleSuperadmin' })
+    )
 
-    const descInput = getByRole('textbox', { name: /Description/i })
+    const descInput = getByRole('textbox', { name: 'users.descriptionOptional' })
     await userEvent.fill(descInput, DESC_VALUE)
 
-    const submitButton = getByRole('button', { name: /Invite/i })
+    const submitButton = getByRole('button', { name: 'users.invite' })
     await userEvent.click(submitButton)
 
     expect(onOpenChange).toHaveBeenCalledOnce()

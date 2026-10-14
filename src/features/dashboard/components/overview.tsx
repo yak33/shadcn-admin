@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   ChartContainer,
@@ -6,26 +7,26 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 
-const data = [
-  { name: '1月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '2月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '3月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '4月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '5月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '6月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '7月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '8月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '9月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '10月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '11月', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: '12月', total: Math.floor(Math.random() * 5000) + 1000 },
-]
+// 数值模块级生成一次，避免重渲染（含语言切换）时随机数跳动
+const rawValues = Array.from({ length: 12 }, () => ({
+  total: Math.floor(Math.random() * 5000) + 1000,
+}))
 
-const chartConfig = {
-  total: { label: '销售额', color: 'var(--chart-1)' },
-} satisfies ChartConfig
+const MONTHS = {
+  zh: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+} as const
 
 export function Overview() {
+  const { t, i18n } = useTranslation()
+  const months = i18n.resolvedLanguage?.startsWith('zh') ? MONTHS.zh : MONTHS.en
+  const data = rawValues.map((v, i) => ({ name: months[i], ...v }))
+
+  // chartConfig 在组件内构造，语言切换时 tooltip 文案才能跟随更新
+  const chartConfig = {
+    total: { label: t('charts.sales'), color: 'var(--chart-1)' },
+  } satisfies ChartConfig
+
   return (
     <ChartContainer config={chartConfig} className='h-[350px] w-full'>
       <BarChart data={data} margin={{ left: 12, right: 12 }}>

@@ -1,6 +1,8 @@
 'use client'
 
+import { useMemo } from 'react'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { showSubmittedData } from '@/lib/show-submitted-data'
@@ -27,71 +29,75 @@ import { SelectDropdown } from '@/components/select-dropdown'
 import { roles } from '../data/data'
 import { type User } from '../data/schema'
 
-const formSchema = z
-  .object({
-    firstName: z.string().min(1, 'First Name is required.'),
-    lastName: z.string().min(1, 'Last Name is required.'),
-    username: z.string().min(1, 'Username is required.'),
-    phoneNumber: z.string().min(1, 'Phone number is required.'),
-    email: z.email({
-      error: (iss) => (iss.input === '' ? 'Email is required.' : undefined),
-    }),
-    password: z.string().transform((pwd) => pwd.trim()),
-    role: z.string().min(1, 'Role is required.'),
-    confirmPassword: z.string().transform((pwd) => pwd.trim()),
-    isEdit: z.boolean(),
-  })
-  .refine(
-    (data) => {
-      if (data.isEdit && !data.password) return true
-      return data.password.length > 0
-    },
-    {
-      message: 'Password is required.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password }) => {
-      if (isEdit && !password) return true
-      return password.length >= 8
-    },
-    {
-      message: 'Password must be at least 8 characters long.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password }) => {
-      if (isEdit && !password) return true
-      return /[a-z]/.test(password)
-    },
-    {
-      message: 'Password must contain at least one lowercase letter.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password }) => {
-      if (isEdit && !password) return true
-      return /\d/.test(password)
-    },
-    {
-      message: 'Password must contain at least one number.',
-      path: ['password'],
-    }
-  )
-  .refine(
-    ({ isEdit, password, confirmPassword }) => {
-      if (isEdit && !password) return true
-      return password === confirmPassword
-    },
-    {
-      message: "Passwords don't match.",
-      path: ['confirmPassword'],
-    }
-  )
-type UserForm = z.infer<typeof formSchema>
+// 校验消息需要翻译，schema 通过工厂函数在组件内用当前语言的 t 构建
+const getUserFormSchema = (t: (key: string) => string) =>
+  z
+    .object({
+      firstName: z.string().min(1, t('users.firstNameRequired')),
+      lastName: z.string().min(1, t('users.lastNameRequired')),
+      username: z.string().min(1, t('users.usernameRequired')),
+      phoneNumber: z.string().min(1, t('users.phoneNumberRequired')),
+      email: z.email({
+        error: (iss) =>
+          iss.input === '' ? t('users.emailRequired') : undefined,
+      }),
+      password: z.string().transform((pwd) => pwd.trim()),
+      role: z.string().min(1, t('users.roleRequired')),
+      confirmPassword: z.string().transform((pwd) => pwd.trim()),
+      isEdit: z.boolean(),
+    })
+    .refine(
+      (data) => {
+        if (data.isEdit && !data.password) return true
+        return data.password.length > 0
+      },
+      {
+        message: t('users.passwordRequired'),
+        path: ['password'],
+      }
+    )
+    .refine(
+      ({ isEdit, password }) => {
+        if (isEdit && !password) return true
+        return password.length >= 8
+      },
+      {
+        message: t('users.passwordMinLength'),
+        path: ['password'],
+      }
+    )
+    .refine(
+      ({ isEdit, password }) => {
+        if (isEdit && !password) return true
+        return /[a-z]/.test(password)
+      },
+      {
+        message: t('users.passwordLowercase'),
+        path: ['password'],
+      }
+    )
+    .refine(
+      ({ isEdit, password }) => {
+        if (isEdit && !password) return true
+        return /\d/.test(password)
+      },
+      {
+        message: t('users.passwordNumber'),
+        path: ['password'],
+      }
+    )
+    .refine(
+      ({ isEdit, password, confirmPassword }) => {
+        if (isEdit && !password) return true
+        return password === confirmPassword
+      },
+      {
+        message: t('users.passwordMismatch'),
+        path: ['confirmPassword'],
+      }
+    )
+
+type UserForm = z.infer<ReturnType<typeof getUserFormSchema>>
 
 type UserActionDialogProps = {
   currentRow?: User
@@ -104,7 +110,9 @@ export function UsersActionDialog({
   open,
   onOpenChange,
 }: UserActionDialogProps) {
+  const { t } = useTranslation()
   const isEdit = !!currentRow
+  const formSchema = useMemo(() => getUserFormSchema(t), [t])
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
@@ -145,10 +153,11 @@ export function UsersActionDialog({
     >
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-start'>
-          <DialogTitle>{isEdit ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? t('users.editUser') : t('users.addNewUser')}
+          </DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Update the user here. ' : 'Create new user here. '}
-            Click save when you&apos;re done.
+            {isEdit ? t('users.editUserDesc') : t('users.addUserDesc')}
           </DialogDescription>
         </DialogHeader>
         <div className='h-105 w-[calc(100%+0.75rem)] overflow-y-auto py-1 pe-3'>
@@ -164,7 +173,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      First Name
+                      {t('users.firstName')}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -184,7 +193,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Last Name
+                      {t('users.lastName')}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -204,7 +213,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Username
+                      {t('users.username')}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -222,7 +231,9 @@ export function UsersActionDialog({
                 name='email'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Email</FormLabel>
+                    <FormLabel className='col-span-2 text-end'>
+                      {t('users.email')}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder='john.doe@gmail.com'
@@ -240,7 +251,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Phone Number
+                      {t('users.phoneNumber')}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -258,14 +269,16 @@ export function UsersActionDialog({
                 name='role'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Role</FormLabel>
+                    <FormLabel className='col-span-2 text-end'>
+                      {t('users.role')}
+                    </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
-                      placeholder='Select a role'
+                      placeholder={t('users.selectRole')}
                       className='col-span-4'
                       items={roles.map(({ label, value }) => ({
-                        label,
+                        label: t(label),
                         value,
                       }))}
                     />
@@ -279,7 +292,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Password
+                      {t('users.password')}
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -298,7 +311,7 @@ export function UsersActionDialog({
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
                     <FormLabel className='col-span-2 text-end'>
-                      Confirm Password
+                      {t('users.confirmPassword')}
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
@@ -317,7 +330,7 @@ export function UsersActionDialog({
         </div>
         <DialogFooter>
           <Button type='submit' form='user-form'>
-            Save changes
+            {t('users.saveChanges')}
           </Button>
         </DialogFooter>
       </DialogContent>

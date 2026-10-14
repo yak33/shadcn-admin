@@ -1,0 +1,42 @@
+{
+  "zh-CN": {
+    "unauthorizedTitle": "访问未授权",
+    "unauthorizedDesc1": "请使用具备相应权限的账号登录",
+    "unauthorizedDesc2": "以访问此资源。",
+    "forbiddenTitle": "禁止访问",
+    "forbiddenDesc1": "你没有足够的权限",
+    "forbiddenDesc2": "查看此资源。",
+    "notFoundTitle": "哎呀！页面不存在！",
+    "notFoundDesc1": "你访问的页面可能不存在",
+    "notFoundDesc2": "或已被移除。",
+    "serverErrorTitle": "哎呀！出错了 ：')",
+    "serverErrorDesc1": "很抱歉给你带来不便。",
+    "serverErrorDesc2": "请稍后重试。",
+    "goBack": "返回上一步",
+    "backToHome": "返回首页",
+    "maintenanceTitle": "网站正在维护",
+    "maintenanceDesc1": "站点当前暂不可用。",
+    "maintenanceDesc2": "我们将尽快恢复。",
+    "learnMore": "了解更多"
+  },
+  "en-US": {
+    "unauthorizedTitle": "Unauthorized Access",
+    "unauthorizedDesc1": "Please log in with the appropriate credentials",
+    "unauthorizedDesc2": "to access this resource.",
+    "forbiddenTitle": "Access Forbidden",
+    "forbiddenDesc1": "You don't have necessary permission",
+    "forbiddenDesc2": "to view this resource.",
+    "notFoundTitle": "Oops! Page Not Found!",
+    "notFoundDesc1": "It seems like the page you're looking for",
+    "notFoundDesc2": "does not exist or might have been removed.",
+    "serverErrorTitle": "Oops! Something went wrong :')",
+    "serverErrorDesc1": "We apologize for the inconvenience.",
+    "serverErrorDesc2": "Please try again later.",
+    "goBack": "Go Back",
+    "backToHome": "Back to Home",
+    "maintenanceTitle": "Website is under maintenance!",
+    "maintenanceDesc1": "The site is not available at the moment.",
+    "maintenanceDesc2": "We'll be back online shortly.",
+    "learnMore": "Learn more"
+  }
+}

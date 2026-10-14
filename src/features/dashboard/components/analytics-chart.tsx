@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   ChartContainer,
@@ -8,50 +9,28 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 
-const data = [
-  {
-    name: '周一',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周二',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周三',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周四',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周五',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周六',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-  {
-    name: '周日',
-    clicks: Math.floor(Math.random() * 900) + 100,
-    uniques: Math.floor(Math.random() * 700) + 80,
-  },
-]
+// 数值模块级生成一次，避免重渲染（含语言切换）时随机数跳动
+const rawValues = Array.from({ length: 7 }, () => ({
+  clicks: Math.floor(Math.random() * 900) + 100,
+  uniques: Math.floor(Math.random() * 700) + 80,
+}))
 
-const chartConfig = {
-  clicks: { label: '点击量', color: 'var(--chart-1)' },
-  uniques: { label: '独立访客', color: 'var(--chart-2)' },
-} satisfies ChartConfig
+const WEEK_DAYS = {
+  zh: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+  en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+} as const
 
 export function AnalyticsChart() {
+  const { t, i18n } = useTranslation()
+  const weekDays = i18n.resolvedLanguage?.startsWith('zh') ? WEEK_DAYS.zh : WEEK_DAYS.en
+  const data = rawValues.map((v, i) => ({ name: weekDays[i], ...v }))
+
+  // chartConfig 在组件内构造，语言切换时 tooltip/图例文案才能跟随更新
+  const chartConfig = {
+    clicks: { label: t('charts.clicks'), color: 'var(--chart-1)' },
+    uniques: { label: t('charts.uniques'), color: 'var(--chart-2)' },
+  } satisfies ChartConfig
+
   return (
     <ChartContainer config={chartConfig} className='h-[300px] w-full'>
       <AreaChart data={data} margin={{ left: 12, right: 12 }}>
