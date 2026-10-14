@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -8,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ConfigDrawer } from '@/components/config-drawer'
+import { LanguageSwitch } from '@/components/language-switch'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { TopNav } from '@/components/layout/top-nav'
@@ -19,12 +21,15 @@ import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'
 
 export function Dashboard() {
+  const { t } = useTranslation()
+
   return (
     <>
       {/* ===== Top Heading ===== */}
       <Header>
         <TopNav links={topNav} className='me-auto' />
         <Search />
+        <LanguageSwitch />
         <ThemeSwitch />
         <ConfigDrawer />
         <ProfileDropdown />
@@ -33,9 +38,11 @@ export function Dashboard() {
       {/* ===== Main ===== */}
       <Main>
         <div className='mb-2 flex items-center justify-between space-y-2'>
-          <h1 className='text-2xl font-bold tracking-tight'>仪表盘</h1>
+          <h1 className='text-2xl font-bold tracking-tight'>
+            {t('dashboard.title', { defaultValue: '仪表盘' })}
+          </h1>
           <div className='flex items-center space-x-2'>
-            <Button>下载</Button>
+            <Button>{t('common.download', { defaultValue: '下载' })}</Button>
           </div>
         </div>
         <Tabs
@@ -45,13 +52,17 @@ export function Dashboard() {
         >
           <div className='w-full overflow-x-auto pb-2'>
             <TabsList>
-              <TabsTrigger value='overview'>概览</TabsTrigger>
-              <TabsTrigger value='analytics'>分析</TabsTrigger>
+              <TabsTrigger value='overview'>
+                {t('dashboard.overview', { defaultValue: '概览' })}
+              </TabsTrigger>
+              <TabsTrigger value='analytics'>
+                {t('dashboard.analytics', { defaultValue: '分析' })}
+              </TabsTrigger>
               <TabsTrigger value='reports' disabled>
-                报告
+                {t('dashboard.reports', { defaultValue: '报告' })}
               </TabsTrigger>
               <TabsTrigger value='notifications' disabled>
-                通知
+                {t('dashboard.notifications', { defaultValue: '通知' })}
               </TabsTrigger>
             </TabsList>
           </div>

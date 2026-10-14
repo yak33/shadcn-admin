@@ -50,48 +50,48 @@ export const sidebarData: SidebarData = {
   ],
   navGroups: [
     {
-      title: '常规',
+      title: 'sidebar.general',
       items: [
         {
-          title: '仪表盘',
+          title: 'sidebar.dashboard',
           url: '/',
           icon: LayoutDashboard,
         },
         {
-          title: '任务清单',
+          title: 'sidebar.tasks',
           url: '/tasks',
           icon: ListTodo,
         },
         {
-          title: '应用',
+          title: 'sidebar.apps',
           url: '/apps',
           icon: Package,
         },
         {
-          title: '聊天',
+          title: 'sidebar.chats',
           url: '/chats',
           badge: '3',
           icon: MessagesSquare,
         },
         {
-          title: '用户',
+          title: 'sidebar.users',
           url: '/users',
           icon: Users,
         },
         {
-          title: 'Clerk 认证',
+          title: 'sidebar.clerk',
           icon: ClerkLogo,
           items: [
             {
-              title: '登录',
+              title: 'sidebar.signIn',
               url: '/clerk/sign-in',
             },
             {
-              title: '注册',
+              title: 'sidebar.signUp',
               url: '/clerk/sign-up',
             },
             {
-              title: '用户管理',
+              title: 'sidebar.userManagement',
               url: '/clerk/user-management',
             },
           ],
@@ -99,60 +99,60 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: '页面',
+      title: 'sidebar.pages',
       items: [
         {
-          title: '认证',
+          title: 'sidebar.auth',
           icon: ShieldCheck,
           items: [
             {
-              title: '登录',
+              title: 'sidebar.signIn',
               url: '/sign-in',
             },
             {
-              title: '登录（双栏）',
+              title: 'sidebar.signIn2',
               url: '/sign-in-2',
             },
             {
-              title: '注册',
+              title: 'sidebar.signUp',
               url: '/sign-up',
             },
             {
-              title: '忘记密码',
+              title: 'sidebar.forgotPassword',
               url: '/forgot-password',
             },
             {
-              title: 'OTP 验证',
+              title: 'sidebar.otp',
               url: '/otp',
             },
           ],
         },
         {
-          title: '错误页',
+          title: 'sidebar.errors',
           icon: Bug,
           items: [
             {
-              title: '未授权',
+              title: 'sidebar.unauthorized',
               url: '/errors/unauthorized',
               icon: Lock,
             },
             {
-              title: '禁止访问',
+              title: 'sidebar.forbidden',
               url: '/errors/forbidden',
               icon: UserX,
             },
             {
-              title: '页面不存在',
+              title: 'sidebar.notFound',
               url: '/errors/not-found',
               icon: FileX,
             },
             {
-              title: '服务器错误',
+              title: 'sidebar.internalServerError',
               url: '/errors/internal-server-error',
               icon: ServerOff,
             },
             {
-              title: '维护中',
+              title: 'sidebar.maintenance',
               url: '/errors/maintenance-error',
               icon: Construction,
             },
@@ -161,41 +161,41 @@ export const sidebarData: SidebarData = {
       ],
     },
     {
-      title: '其他',
+      title: 'sidebar.other',
       items: [
         {
-          title: '设置',
+          title: 'sidebar.settings',
           icon: Settings,
           items: [
             {
-              title: '个人资料',
+              title: 'sidebar.profile',
               url: '/settings',
               icon: UserCog,
             },
             {
-              title: '账户',
+              title: 'sidebar.account',
               url: '/settings/account',
               icon: Wrench,
             },
             {
-              title: '外观',
+              title: 'sidebar.appearance',
               url: '/settings/appearance',
               icon: Palette,
             },
             {
-              title: '通知',
+              title: 'sidebar.notifications',
               url: '/settings/notifications',
               icon: Bell,
             },
             {
-              title: '显示',
+              title: 'sidebar.display',
               url: '/settings/display',
               icon: Monitor,
             },
           ],
         },
         {
-          title: '帮助中心',
+          title: 'sidebar.helpCenter',
           url: '/help-center',
           icon: HelpCircle,
         },

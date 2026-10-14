@@ -1,5 +1,7 @@
 # Shadcn Admin Dashboard
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 Admin Dashboard UI crafted with Shadcn and Vite. Built with responsiveness and accessibility in mind.
 
 ![alt text](public/images/shadcn-admin.png)
